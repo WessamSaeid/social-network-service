@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\TweetController;
 use App\Http\Controllers\API\UserController;
 
 /*
@@ -19,6 +20,8 @@ Route::post('/signup', [UserController::class, 'signup']);
 Route::post('/login', [UserController::class, 'login']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/tweets', [TweetController::class, 'store']);
+
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
