@@ -30,4 +30,21 @@ class TweetController extends Controller
             'tweet' => $tweet
         ]);
     }
+
+    /**
+     * get timeline
+     * 
+     * @param Illuminate\Http\Request
+     * 
+     * @return Illuminate\Http\Response
+     */
+    public function timeline(Request $request)
+    {
+        $followingsIds = $request->user()->followings()->pluck('user_id');
+        $tweets = Tweet::whereIn('user_id', $followingsIds)->with('user')->paginate();
+
+        return response()->json([
+            'tweets' => $tweets
+        ]);
+    }
 }
