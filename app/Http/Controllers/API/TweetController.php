@@ -8,12 +8,36 @@ use App\Models\Tweet;
 
 class TweetController extends Controller
 {
-    /**
-     * create tweet method
-     * 
-     * @param Illuminate\Http\Request
-     * 
-     * @return Illuminate\Http\Response
+   /**
+     * @OA\Post(
+     * path="/api/tweets",
+     * summary="Create tweet",
+     * description="Create new tweet",
+     * operationId="store",
+     * tags={"tweets"},
+     * @OA\RequestBody(
+     *    required=true,
+     *    description="text of the tweet",
+     *    @OA\JsonContent(
+     *       required={"text"},
+     *       @OA\Property(property="text", type="string", example="New tweet"),
+     *    ),
+     * ),
+     * @OA\Response(
+     *    response=422,
+     *    description="validation exception",
+     *    @OA\JsonContent(
+     *       @OA\Property(property="message", type="string", example="The given data was invalid.")
+     *        )
+     *     ),
+     * @OA\Response(
+     *    response=201,
+     *    description="created successfully",
+     *    @OA\JsonContent(
+     *       @OA\Property(property="tweet", type="object", ref="#/components/schemas/Tweet"),
+     *        )
+     *     )
+     * )
      */
     public function store(Request $request)
     {
@@ -32,11 +56,20 @@ class TweetController extends Controller
     }
 
     /**
-     * get timeline
-     * 
-     * @param Illuminate\Http\Request
-     * 
-     * @return Illuminate\Http\Response
+     * @OA\Get(
+     * path="/api/timeline",
+     * summary="Show timeline twets",
+     * description="List all the tweets of the followed users paginated",
+     * operationId="timeline",
+     * tags={"Timeline"},
+     * @OA\Response(
+     *    response=200,
+     *    description="success",
+     *    @OA\JsonContent(
+     *           @OA\Property(property="tweets", type="object")
+     *      )
+     *     )
+     * )
      */
     public function timeline(Request $request)
     {
