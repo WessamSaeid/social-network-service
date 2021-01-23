@@ -62,7 +62,7 @@ class UserController extends Controller
 
         if (! $user || ! Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages([
-                'email' => ['The provided credentials are incorrect.'],
+                'email' => __('validation.email'),
             ]);
         }
 
@@ -93,14 +93,14 @@ class UserController extends Controller
         $followings = $currentUser->followings();
         if ($followings->where('follower_id', $currentUser->id)->where('user_id', $request->user_id)->exists()) {
             return response()->json([
-                'message' => "You have already followed '{$followingUser->name}'."
+                'message' => __('lang.followed_already', ['name' => $followingUser->name])
             ]);
         }
 
         $followings->attach($followingUser);
 
         return response()->json([
-            'message' => "You have followed '{$followingUser->name}' successfully."
+            'message' =>  __('lang.followed_successfully', ['name' => $followingUser->name])
         ]);
     }
 }

@@ -123,6 +123,11 @@ return [
 
     'cipher' => 'AES-256-CBC',
 
+    /**
+     * API key used to access all the apis of the application
+     */
+    'api_key' => env('API_KEY', ''),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers
