@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -67,6 +68,39 @@ class UserController extends Controller
 
         return response()->json([
             'auth_token' =>  $user->createToken('auth-token')->plainTextToken
+        ]);
+    }
+
+    /**
+     * follow user
+     * 
+     * @param Illuminate\Http\Request
+     * 
+     * @return Illuminate\Http\Response
+     */
+    public function follow(Request $request)
+    {
+        $request->validate([
+            'user_id' => [
+                'required',
+                Rule::in(User::pluck('id'))
+            ]
+        ]);
+
+        $currentUser = $request->user();
+        $followingUser = User::find($request->user_id);
+
+        $followings = $currentUser->followings();
+        if ($followings->where('follower_id', $currentUser->id)->where('user_id', $request->user_id)->exists()) {
+            return response()->json([
+                'message' => "You have already followed '{$followingUser->name}'."
+            ]);
+        }
+
+        $followings->attach($followingUser);
+
+        return response()->json([
+            'message' => "You have followed '{$followingUser->name}' successfully."
         ]);
     }
 }

@@ -21,6 +21,7 @@ Route::post('/login', [UserController::class, 'login']);
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/tweets', [TweetController::class, 'store']);
+    Route::post('/users/follow', [UserController::class, 'follow']);
 
     Route::get('/user', function (Request $request) {
         return $request->user();
